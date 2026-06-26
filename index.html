@@ -591,8 +591,13 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
 
       <div class="qsub">
         <p class="qline"><span class="qid">1.2</span> Name two source types an investigator could use, besides images.</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb12')">Reveal model answer</button>
-        <div class="reveal-box" id="rb12">e.g. public records, news archives, forums, government databases, social media bios.</div>
+        <div class="flag-row">
+          <input type="text" id="q12" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q12','r12','any',['record','news','forum','database','social','media','bio','registry','public','web'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb12')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r12"></div>
+        <div class="reveal-box" id="rb12">Model Answer: e.g. public records, news archives, forums, government databases, social media bios.</div>
       </div>
 
       <div class="qsub">
@@ -617,14 +622,24 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
 
       <div class="qsub">
         <p class="qline"><span class="qid">2.2</span> A result links to a travel blog with the same photo. What do you check next on that page?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb22')">Reveal model answer</button>
-        <div class="reveal-box" id="rb22">The post's text/captions and any other photos on the same page for location names or context clues.</div>
+        <div class="flag-row">
+          <input type="text" id="q22" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q22','r22','any',['text','caption','photo','image','location','context','clue','comment','metadata','exif'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb22')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r22"></div>
+        <div class="reveal-box" id="rb22">Model Answer: The post's text/captions and any other photos on the same page for location names or context clues.</div>
       </div>
 
       <div class="qsub">
         <p class="qline"><span class="qid">2.3</span> Why might a reverse image search return nothing, even for a real photo?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb23')">Reveal model answer</button>
-        <div class="reveal-box" id="rb23">The image may be new/never indexed, AI-generated, or too generic to return a unique match.</div>
+        <div class="flag-row">
+          <input type="text" id="q23" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q23','r23','any',['new','index','ai','generate','generic','match','private','crawl','database','crop'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb23')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r23"></div>
+        <div class="reveal-box" id="rb23">Model Answer: The image may be new/never indexed, AI-generated, or too generic to return a unique match.</div>
       </div>
     </div>
 
@@ -637,20 +652,35 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
 
       <div class="qsub">
         <p class="qline"><span class="qid">3.1</span> What's one advantage Lens has over a normal reverse image search?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb31')">Reveal model answer</button>
-        <div class="reveal-box" id="rb31">It can recognise landmarks/objects within an image, not just match the photo as a whole.</div>
+        <div class="flag-row">
+          <input type="text" id="q31" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q31','r31','any',['landmark','object','within','crop','part','segment','recogni','detect','isolate'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb31')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r31"></div>
+        <div class="reveal-box" id="rb31">Model Answer: It can recognise landmarks/objects within an image, not just match the photo as a whole.</div>
       </div>
 
       <div class="qsub">
         <p class="qline"><span class="qid">3.2</span> Lens gives three possible cities for a building. What's your next step?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb32')">Reveal model answer</button>
-        <div class="reveal-box" id="rb32">Cross-reference distinguishing details — signage language, architecture style — against each candidate city.</div>
+        <div class="flag-row">
+          <input type="text" id="q32" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q32','r32','any',['cross','reference','sign','language','architecture','style','detail','map','street view','compare'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb32')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r32"></div>
+        <div class="reveal-box" id="rb32">Model Answer: Cross-reference distinguishing details — signage language, architecture style — against each candidate city.</div>
       </div>
 
       <div class="qsub">
         <p class="qline"><span class="qid">3.3</span> List two visual clues inside a photo, besides a landmark, that hint at location.</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb33')">Reveal model answer</button>
-        <div class="reveal-box" id="rb33">e.g. language on signage, vehicle/number plate style, vegetation or climate cues.</div>
+        <div class="flag-row">
+          <input type="text" id="q33" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q33','r33','any',['sign','language','plate','vehicle','car','vegetation','tree','plant','climate','weather','road','marking','architecture'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb33')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r33"></div>
+        <div class="reveal-box" id="rb33">Model Answer: e.g. language on signage, vehicle/number plate style, vegetation or climate cues.</div>
       </div>
     </div>
 
@@ -675,8 +705,13 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
 
       <div class="qsub">
         <p class="qline"><span class="qid">4.3</span> Why do most WhatsApp/Instagram photos have no GPS data, even if the original did?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb43')">Reveal model answer</button>
-        <div class="reveal-box" id="rb43">Most platforms strip EXIF/GPS data on upload to protect user privacy and reduce file size.</div>
+        <div class="flag-row">
+          <input type="text" id="q43" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q43','r43','any',['strip','remove','delete','privacy','size','compress','exif','metadata','gps'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb43')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r43"></div>
+        <div class="reveal-box" id="rb43">Model Answer: Most platforms strip EXIF/GPS data on upload to protect user privacy and reduce file size.</div>
       </div>
 
       <div class="qsub">
@@ -695,20 +730,35 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
 
       <div class="qsub">
         <p class="qline"><span class="qid">5.1</span> What's your investigation order, step by step, and why that order?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb51')">Reveal model answer</button>
-        <div class="reveal-box" id="rb51">Reverse image search/Lens first (fast, broad) → manual visual clue analysis → EXIF metadata as the slower but sometimes most precise fallback.</div>
+        <div class="flag-row">
+          <input type="text" id="q51" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q51','r51','any',['lens','reverse','exif','metadata','search','fast','slow','fallback','visual'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb51')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r51"></div>
+        <div class="reveal-box" id="rb51">Model Answer: Reverse image search/Lens first (fast, broad) → manual visual clue analysis → EXIF metadata as the slower but sometimes most precise fallback.</div>
       </div>
 
       <div class="qsub">
         <p class="qline"><span class="qid">5.2</span> If both visual search and EXIF return nothing, what's a third approach?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb52')">Reveal model answer</button>
-        <div class="reveal-box" id="rb52">Manually analyse visual clues — architecture style, vegetation, road markings, signage language — and compare against known regions.</div>
+        <div class="flag-row">
+          <input type="text" id="q52" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q52','r52','any',['manual','visual','clue','sign','language','architecture','vegetation','road','marking','sun','shadow','map','street view'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb52')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r52"></div>
+        <div class="reveal-box" id="rb52">Model Answer: Manually analyse visual clues — architecture style, vegetation, road markings, signage language — and compare against known regions.</div>
       </div>
 
       <div class="qsub">
         <p class="qline"><span class="qid">5.3</span> What single piece of evidence is strong enough alone vs. evidence you'd double-check?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb53')">Reveal model answer</button>
-        <div class="reveal-box" id="rb53">Strong alone: exact GPS coordinates from EXIF. Worth double-checking: a single Lens visual match, since landmarks can repeat across cities.</div>
+        <div class="flag-row">
+          <input type="text" id="q53" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q53','r53','any',['gps','exif','coor','lens','match','landmark','repeat','double','check'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb53')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r53"></div>
+        <div class="reveal-box" id="rb53">Model Answer: Strong alone: exact GPS coordinates from EXIF. Worth double-checking: a single Lens visual match, since landmarks can repeat across cities.</div>
       </div>
     </div>
 
@@ -721,14 +771,24 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
 
       <div class="qsub">
         <p class="qline"><span class="qid">6.1</span> Name one habit to adopt before posting photos online, to reduce your own geolocation risk.</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb61')">Reveal model answer</button>
-        <div class="reveal-box" id="rb61">e.g. disable location tagging before posting, or strip EXIF data before sharing.</div>
+        <div class="flag-row">
+          <input type="text" id="q61" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q61','r61','any',['disable','turn off','location','tag','strip','remove','delete','exif','metadata','gps'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb61')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r61"></div>
+        <div class="reveal-box" id="rb61">Model Answer: e.g. disable location tagging before posting, or strip EXIF data before sharing.</div>
       </div>
 
       <div class="qsub">
         <p class="qline"><span class="qid">6.2</span> Why is platform metadata-stripping a double-edged sword?</p>
-        <button class="reveal-btn" onclick="toggleReveal('rb62')">Reveal model answer</button>
-        <div class="reveal-box" id="rb62">It protects everyday users' privacy, but also removes a key forensic trail that investigators rely on — privacy vs. traceability.</div>
+        <div class="flag-row">
+          <input type="text" id="q62" placeholder="type your answer" autocomplete="off">
+          <button class="check" onclick="checkAnswer('q62','r62','any',['protect','privacy','remove','delete','forensic','investigat','trail','evidence','trace'])">Check</button>
+          <button class="reveal-btn" onclick="toggleReveal('rb62')">Reveal Answer</button>
+        </div>
+        <div class="stamp-result" id="r62"></div>
+        <div class="reveal-box" id="rb62">Model Answer: It protects everyday users' privacy, but also removes a key forensic trail that investigators rely on — privacy vs. traceability.</div>
       </div>
     </div>
   </div>
@@ -786,8 +846,27 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
   }
 
   // ---- Field Notes questionnaire ----
-  const FN_TOTAL = 6;
+  const FN_TOTAL = 18;
   let fnConfirmed = 0;
+
+  // Trigger check button on Enter key press in inputs
+  setupEnterKeyListeners();
+
+  function setupEnterKeyListeners() {
+    document.querySelectorAll('input[type="text"]').forEach(input => {
+      if (input.dataset.listener === 'true') return;
+      input.dataset.listener = 'true';
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const btn = input.parentElement.querySelector('button.check');
+          if (btn) {
+            btn.click();
+          }
+        }
+      });
+    });
+  }
 
   function checkAnswer(inputId, resultId, mode, terms){
     const val = document.getElementById(inputId).value.trim().toLowerCase();
