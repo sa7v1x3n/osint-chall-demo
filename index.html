@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASE FILE NO. 047 — Operation Lens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDE6D6;
+    --paper-dark:#E2D9C4;
+    --ink:#1B2A3D;
+    --redact:#B23A2E;
+    --kraft:#8B6F47;
+    --kraft-dark:#6E5A3A;
+    --slate:#4A5568;
+    --gold:#C9A227;
+    --good:#3F6B4A;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8px 8px, rgba(0,0,0,0.10) 1px, transparent 1.4px) 0 0/24px 24px,
+      linear-gradient(160deg, var(--kraft) 0%, var(--kraft-dark) 100%);
+    min-height:100vh;
+    padding:28px 16px 64px;
+  }
+
+  .wrap{max-width:880px;margin:0 auto;}
+
+  /* ---------- Header / folder tab ---------- */
+  .case-header{
+    background:var(--ink);
+    color:var(--paper);
+    padding:18px 24px;
+    border-radius:8px 8px 0 0;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .case-header .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    color:var(--gold);
+    text-transform:uppercase;
+  }
+  .case-header h1{
+    font-family:'Special Elite',monospace;
+    font-size:clamp(22px,4vw,32px);
+    margin:4px 0 0;
+    letter-spacing:0.01em;
+  }
+  .case-header .stamp-mini{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    border:2px solid var(--redact);
+    color:var(--redact);
+    padding:4px 8px;
+    transform:rotate(-4deg);
+    border-radius:3px;
+    white-space:nowrap;
+  }
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    display:flex;
+    background:var(--kraft-dark);
+    border-radius:0 0 0 0;
+    overflow-x:auto;
+  }
+  .tab{
+    font-family:'Special Elite',monospace;
+    flex:1;
+    text-align:center;
+    padding:12px 10px;
+    cursor:pointer;
+    color:var(--paper-dark);
+    background:var(--kraft-dark);
+    border:none;
+    border-right:1px solid rgba(0,0,0,0.15);
+    font-size:14px;
+    letter-spacing:0.04em;
+    transition:background 0.2s, color 0.2s;
+  }
+  .tab:last-child{border-right:none;}
+  .tab.active{
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .tab:focus-visible{outline:3px solid var(--gold); outline-offset:-3px;}
+
+  /* ---------- Panels ---------- */
+  .panel{
+    background:var(--paper);
+    border-radius:0 0 8px 8px;
+    padding:28px 24px 32px;
+    box-shadow:0 18px 40px rgba(0,0,0,0.35);
+    display:none;
+  }
+  .panel.active{display:block;}
+
+  .panel h2{
+    font-family:'Special Elite',monospace;
+    font-size:20px;
+    margin:0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .panel h2 .num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--redact);
+    border:1.5px solid var(--redact);
+    padding:2px 6px;
+    border-radius:3px;
+  }
+
+  /* ---------- Briefing: icon cards instead of paragraphs ---------- */
+  .brief-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-top:8px;
+  }
+  @media (max-width:600px){.brief-grid{grid-template-columns:1fr;}}
+  .brief-card{
+    background:var(--paper-dark);
+    border:1.5px dashed var(--kraft);
+    border-radius:10px;
+    padding:18px 12px;
+    text-align:center;
+  }
+  .brief-card svg{width:40px;height:40px;margin-bottom:10px;}
+  .brief-card p{
+    font-size:13px;
+    font-weight:600;
+    color:var(--slate);
+    margin:0;
+    line-height:1.4;
+  }
+
+  .mission-line{
+    margin-top:20px;
+    text-align:center;
+    font-family:'Special Elite',monospace;
+    font-size:16px;
+    color:var(--redact);
+  }
+
+  /* ---------- Evidence board ---------- */
+  .board{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    align-items:flex-start;
+  }
+  .polaroid{
+    background:#fff;
+    padding:10px 10px 34px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.25);
+    width:min(320px,100%);
+    transform:rotate(-2deg);
+    position:relative;
+    flex-shrink:0;
+  }
+  .polaroid::before{
+    content:"";
+    position:absolute;
+    top:-12px;left:50%;
+    transform:translateX(-50%) rotate(3deg);
+    width:54px;height:20px;
+    background:rgba(201,162,39,0.55);
+    box-shadow:0 2px 4px rgba(0,0,0,0.2);
+  }
+  .polaroid .frame{
+    width:100%;
+    height:400px;
+    background:#111827;
+    border-radius:2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .polaroid .frame img{width:100%;height:100%;object-fit:cover;display:block;}
+  .polaroid .cap{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    text-align:center;
+    margin-top:10px;
+    color:#555;
+  }
+
+  .steps{flex:1; min-width:240px;}
+  .step{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:16px;
+    position:relative;
+  }
+  .step:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    left:19px; top:40px;
+    width:2px; height:24px;
+    background:repeating-linear-gradient(to bottom, var(--redact) 0 4px, transparent 4px 8px);
+  }
+  .step .icon{
+    width:40px;height:40px;
+    background:var(--ink);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .step .icon svg{width:20px;height:20px;stroke:var(--paper);}
+  .step p{margin:6px 0 0; font-size:14px; font-weight:600; color:var(--ink);}
+  .step span.tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    color:var(--slate);
+    text-transform:uppercase;
+  }
+
+  .flag-row{
+    margin-top:22px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  input[type="text"]{
+    font-family:'JetBrains Mono',monospace;
+    border:2px solid var(--ink);
+    border-radius:6px;
+    padding:10px 12px;
+    font-size:14px;
+    flex:1;
+    min-width:200px;
+    background:#fff;
+  }
+  input[type="text"]:focus-visible{outline:3px solid var(--gold);}
+  button.check{
+    font-family:'Special Elite',monospace;
+    background:var(--redact);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:10px 18px;
+    font-size:14px;
+    cursor:pointer;
+    transition:transform 0.15s, background 0.2s;
+  }
+  button.check:hover{transform:translateY(-1px); background:#962e24;}
+  button.check:focus-visible{outline:3px solid var(--gold);}
+
+  .stamp-result{
+    margin-top:10px;
+    font-family:'Special Elite',monospace;
+    font-size:14px;
+    display:none;
+    padding:6px 10px;
+    border-radius:4px;
+    width:fit-content;
+  }
+  .stamp-result.show{display:block;}
+  .stamp-result.ok{background:rgba(63,107,74,0.15); color:var(--good); border:2px solid var(--good);}
+  .stamp-result.no{background:rgba(178,58,46,0.12); color:var(--redact); border:2px solid var(--redact);}
+
+  /* ---------- Forensics ---------- */
+  .forensics-toggle{
+    font-family:'Special Elite',monospace;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:6px;
+    padding:10px 16px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .forensics-toggle:focus-visible{outline:3px solid var(--gold);}
+  .terminal{
+    margin-top:16px;
+    background:#10171f;
+    color:#9ff7c2;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    padding:16px;
+    border-radius:8px;
+    line-height:1.6;
+    display:none;
+    overflow-x:auto;
+  }
+  .terminal.show{display:block;}
+  .terminal .dim{color:#6b8f7a;}
+  .note{
+    font-size:13px;
+    color:var(--slate);
+    margin-top:10px;
+  }
+
+  /* ---------- Debrief ---------- */
+  .q-block{
+    background:var(--paper-dark);
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:16px;
+  }
+  .q-block .qhead{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .q-block .qhead svg{width:26px;height:26px;}
+  .q-block .qhead p{margin:0; font-weight:700; font-size:14px;}
+
+  .outcomes{
+    margin-top:28px;
+    border-top:2px dashed var(--kraft);
+    padding-top:20px;
+  }
+  .outcomes h3{
+    font-family:'Special Elite',monospace;
+    font-size:16px;
+    margin:0 0 10px;
+  }
+  .outcomes ul{
+    margin:0;
+    padding-left:20px;
+    font-size:14px;
+    line-height:1.7;
+    color:var(--slate);
+  }
+
+  .dev-note{
+    margin-top:18px;
+    font-size:12px;
+    color:var(--slate);
+    background:rgba(0,0,0,0.04);
+    border-left:3px solid var(--gold);
+    padding:8px 12px;
+    border-radius:4px;
+  }
+
+  /* ---------- Field Notes (questionnaire) ---------- */
+  .fn-progress{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--redact);
+    border:1.5px solid var(--redact);
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:4px;
+    margin-bottom:18px;
+  }
+  .entry{
+    background:var(--paper-dark);
+    border-radius:10px;
+    padding:16px 16px 18px;
+    margin-bottom:14px;
+  }
+  .entry .ehead{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .entry .ehead svg{width:24px;height:24px;flex-shrink:0;}
+  .entry .ehead h3{
+    font-family:'Special Elite',monospace;
+    font-size:15px;
+    margin:0;
+  }
+  .entry .blurb{
+    font-size:13px;
+    color:var(--slate);
+    margin:0 0 14px;
+    line-height:1.5;
+  }
+  .qline{
+    font-size:13.5px;
+    font-weight:600;
+    margin:0 0 8px;
+  }
+  .qline .qid{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--redact);
+    margin-right:4px;
+  }
+  .qsub{margin-bottom:16px;}
+  .qsub:last-child{margin-bottom:0;}
+  .reveal-btn{
+    font-family:'JetBrains Mono',monospace;
+    background:var(--kraft-dark);
+    color:var(--paper);
+    border:none;
+    border-radius:5px;
+    padding:6px 12px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .reveal-btn:focus-visible{outline:3px solid var(--gold);}
+  .reveal-box{
+    margin-top:8px;
+    border-left:3px dashed var(--kraft);
+    background:rgba(255,255,255,0.5);
+    padding:8px 12px;
+    font-size:13px;
+    color:var(--ink);
+    display:none;
+    line-height:1.5;
+  }
+  .reveal-box.show{display:block;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="case-header">
+    <div>
+      <div class="eyebrow">OSINT Training Room · Beginner Track</div>
+      <h1>CASE FILE NO. 047 — Operation Lens</h1>
+    </div>
+    <div class="stamp-mini">CLASSIFIED // TRAINING</div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-panel="briefing">📁 Briefing</button>
+    <button class="tab" data-panel="evidence">🔎 Evidence</button>
+    <button class="tab" data-panel="forensics">🧪 Forensics</button>
+    <button class="tab" data-panel="debrief">📋 Debrief</button>
+    <button class="tab" data-panel="fieldnotes">📓 Field Notes</button>
+  </div>
+
+  <!-- BRIEFING -->
+  <div class="panel active" id="briefing">
+    <h2><span class="num">01</span> The Tip</h2>
+    <div class="brief-grid">
+      <div class="brief-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B2A3D" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+        <p>An anonymous tip line<br>drops a single photo.</p>
+      </div>
+      <div class="brief-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B2A3D" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-4 4-3-3-6 6"/></svg>
+        <p>No caption.<br>No location. No name.</p>
+      </div>
+      <div class="brief-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B2A3D" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.8" fill="#1B2A3D"/></svg>
+        <p>Your job: find where<br>this photo was taken.</p>
+      </div>
+    </div>
+    <p class="mission-line">Open the EVIDENCE tab to begin.</p>
+  </div>
+
+  <!-- EVIDENCE -->
+  <div class="panel" id="evidence">
+    <h2><span class="num">02</span> Exhibit A</h2>
+    <div class="board">
+      <div class="polaroid">
+        <div class="frame">
+          <img src="assets/exhibit-a.png" alt="Exhibit A - night photograph of Charminar monument">
+        </div>
+        <div class="cap">EXHIBIT-A.PNG — starting clue</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="M21 21l-5.5-5.5"/></svg></div>
+          <div>
+            <span class="tag">Step 1</span>
+            <p>Reverse-image-search Exhibit A.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="M21 21l-5.5-5.5"/><path d="M7 10h6M10 7v6"/></svg></div>
+          <div>
+            <span class="tag">Step 2</span>
+            <p>Run it through Google Lens for visual matches.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-7.5 7-12a7 7 0 0 0-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg></div>
+          <div>
+            <span class="tag">Step 3</span>
+            <p>Cross-check the result, then submit the location.</p>
+          </div>
+        </div>
+
+        <div class="flag-row">
+          <input type="text" id="flag1" placeholder="charminar or flag{charminar}" autocomplete="off">
+          <button class="check" onclick="checkFlag('flag1','location','result1')">Submit</button>
+        </div>
+        <div class="stamp-result" id="result1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORENSICS -->
+  <div class="panel" id="forensics">
+    <h2><span class="num">03</span> Stuck? Pull the File's Metadata</h2>
+    <p style="font-size:14px;color:var(--slate);max-width:520px;">If the visual search doesn't land, every photo carries a second trail — its EXIF metadata. This is the forensic fallback.</p>
+    <button class="forensics-toggle" onclick="toggleTerminal()">Run exiftool on EXHIBIT-A.PNG</button>
+    <div class="terminal" id="terminal">
+<span class="dim">$ exiftool EXHIBIT-A.PNG</span>
+Camera Model        : <span id="exif-cam">[insert camera/phone model]</span>
+Date/Time Original   : <span id="exif-date">[insert capture timestamp]</span>
+GPS Latitude         : <span id="exif-lat">[insert latitude]</span>
+GPS Longitude        : <span id="exif-lng">[insert longitude]</span>
+GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]</span>
+    </div>
+    <p class="note">⚠️ Many phones/social platforms strip GPS tags on upload — that's why this is the backup method, not the first one.</p>
+  </div>
+
+  <!-- DEBRIEF -->
+  <div class="panel" id="debrief">
+    <h2><span class="num">04</span> Going Deeper (Medium Tier)</h2>
+
+    <div class="q-block">
+      <div class="qhead">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B2A3D" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+        <p>Q2 — What time of day was Exhibit A taken?</p>
+      </div>
+      <div class="flag-row">
+        <input type="text" id="flag2" placeholder="night" autocomplete="off">
+        <button class="check" onclick="checkFlag('flag2','time','result2')">Submit</button>
+      </div>
+      <div class="stamp-result" id="result2"></div>
+    </div>
+
+    <div class="q-block">
+      <div class="qhead">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B2A3D" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l2-3h4l2 3"/><circle cx="12" cy="13.5" r="3.5"/></svg>
+        <p>Q3 — Based on the camera metadata, was this likely a tourist's phone or a professional camera?</p>
+      </div>
+      <div class="flag-row">
+        <input type="text" id="flag3" placeholder="phone / camera" autocomplete="off">
+        <button class="check" onclick="checkFlag('flag3','photographer','result3')">Submit</button>
+      </div>
+      <div class="stamp-result" id="result3"></div>
+    </div>
+
+    <div class="outcomes">
+      <h3>Learning Outcomes</h3>
+      <ul>
+        <li>Use reverse image search and Google Lens as a primary geolocation technique.</li>
+        <li>Read EXIF/metadata as a secondary forensic trail when visual search fails.</li>
+        <li>Recognise that most social platforms strip GPS data — and why that matters for OPSEC.</li>
+        <li>Correlate multiple weak signals (lighting, device type, visual landmarks) into one confident conclusion.</li>
+        <li>Practice documenting an OSINT investigation as a chain of evidence, not a single lucky guess.</li>
+      </ul>
+    </div>
+
+    <div class="dev-note">
+      <strong>Builder note (delete before showing the client):</strong> Exhibit A has been replaced with your Charminar image. Update the <code>ANSWERS</code> block only if you want a different final flag.
+    </div>
+  </div>
+
+  <!-- FIELD NOTES (questionnaire) -->
+  <div class="panel" id="fieldnotes">
+    <h2><span class="num">05</span> Field Notebook</h2>
+    <div class="fn-progress" id="fn-progress">0 / 6 confirmed</div>
+
+    <div class="entry">
+      <div class="ehead">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B2A3D" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+        <h3>Entry 01 — What is OSINT?</h3>
+      </div>
+      <p class="blurb">OSINT means gathering intelligence purely from publicly available sources — search engines, public records, images, metadata — instead of hacking or insider access.</p>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">1.1</span> What does OSINT stand for?</p>
+        <div class="flag-row"><input type="text" id="q11" placeholder="type your answer" autocomplete="off"><button class="check" onclick="checkAnswer('q11','r11','any',['open source intelligence','open-source intelligence'])">Check</button></div>
+        <div class="stamp-result" id="r11"></div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">1.2</span> Name two source types an investigator could use, besides images.</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb12')">Reveal model answer</button>
+        <div class="reveal-box" id="rb12">e.g. public records, news archives, forums, government databases, social media bios.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">1.3</span> True or False: OSINT only refers to social media information.</p>
+        <div class="flag-row"><input type="text" id="q13" placeholder="true / false" autocomplete="off"><button class="check" onclick="checkAnswer('q13','r13','any',['false'])">Check</button></div>
+        <div class="stamp-result" id="r13"></div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="ehead">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke="#1B2A3D"><circle cx="10" cy="10" r="6"/><path d="M21 21l-5.5-5.5"/></svg>
+        <h3>Entry 02 — Reverse Image Search</h3>
+      </div>
+      <p class="blurb">Search the web using an image instead of text. Usually the first move in any geolocation challenge.</p>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">2.1</span> Name a reverse-image-search tool/engine.</p>
+        <div class="flag-row"><input type="text" id="q21" placeholder="type your answer" autocomplete="off"><button class="check" onclick="checkAnswer('q21','r21','any',['google','tineye','yandex','bing'])">Check</button></div>
+        <div class="stamp-result" id="r21"></div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">2.2</span> A result links to a travel blog with the same photo. What do you check next on that page?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb22')">Reveal model answer</button>
+        <div class="reveal-box" id="rb22">The post's text/captions and any other photos on the same page for location names or context clues.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">2.3</span> Why might a reverse image search return nothing, even for a real photo?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb23')">Reveal model answer</button>
+        <div class="reveal-box" id="rb23">The image may be new/never indexed, AI-generated, or too generic to return a unique match.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="ehead">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke="#1B2A3D"><path d="M12 21s7-7.5 7-12a7 7 0 0 0-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>
+        <h3>Entry 03 — Google Lens</h3>
+      </div>
+      <p class="blurb">Lens identifies landmarks, text, and objects inside an image — useful when a photo is cropped or only shows a partial view.</p>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">3.1</span> What's one advantage Lens has over a normal reverse image search?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb31')">Reveal model answer</button>
+        <div class="reveal-box" id="rb31">It can recognise landmarks/objects within an image, not just match the photo as a whole.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">3.2</span> Lens gives three possible cities for a building. What's your next step?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb32')">Reveal model answer</button>
+        <div class="reveal-box" id="rb32">Cross-reference distinguishing details — signage language, architecture style — against each candidate city.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">3.3</span> List two visual clues inside a photo, besides a landmark, that hint at location.</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb33')">Reveal model answer</button>
+        <div class="reveal-box" id="rb33">e.g. language on signage, vehicle/number plate style, vegetation or climate cues.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="ehead">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke="#1B2A3D"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg>
+        <h3>Entry 04 — EXIF & exiftool</h3>
+      </div>
+      <p class="blurb">Camera model, timestamp, sometimes GPS — all hidden in the file itself. Your forensic fallback when visual search comes up empty.</p>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">4.1</span> What command shows all metadata in a file named photo.jpg?</p>
+        <div class="flag-row"><input type="text" id="q41" placeholder="type the command" autocomplete="off"><button class="check" onclick="checkAnswer('q41','r41','any',['exiftool'])">Check</button></div>
+        <div class="stamp-result" id="r41"></div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">4.2</span> Which two EXIF tags together give an exact location?</p>
+        <div class="flag-row"><input type="text" id="q42" placeholder="type your answer" autocomplete="off"><button class="check" onclick="checkAnswer('q42','r42','all',['lat','long'])">Check</button></div>
+        <div class="stamp-result" id="r42"></div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">4.3</span> Why do most WhatsApp/Instagram photos have no GPS data, even if the original did?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb43')">Reveal model answer</button>
+        <div class="reveal-box" id="rb43">Most platforms strip EXIF/GPS data on upload to protect user privacy and reduce file size.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">4.4</span> Besides GPS, name another EXIF field that helps guess when a photo was taken.</p>
+        <div class="flag-row"><input type="text" id="q44" placeholder="type your answer" autocomplete="off"><button class="check" onclick="checkAnswer('q44','r44','any',['date','time'])">Check</button></div>
+        <div class="stamp-result" id="r44"></div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="ehead">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke="#1B2A3D"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9.5 9.5l5 5"/></svg>
+        <h3>Entry 05 — Putting It Together</h3>
+      </div>
+      <p class="blurb">Apply this to Exhibit A directly — no caption, no obvious clues.</p>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">5.1</span> What's your investigation order, step by step, and why that order?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb51')">Reveal model answer</button>
+        <div class="reveal-box" id="rb51">Reverse image search/Lens first (fast, broad) → manual visual clue analysis → EXIF metadata as the slower but sometimes most precise fallback.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">5.2</span> If both visual search and EXIF return nothing, what's a third approach?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb52')">Reveal model answer</button>
+        <div class="reveal-box" id="rb52">Manually analyse visual clues — architecture style, vegetation, road markings, signage language — and compare against known regions.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">5.3</span> What single piece of evidence is strong enough alone vs. evidence you'd double-check?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb53')">Reveal model answer</button>
+        <div class="reveal-box" id="rb53">Strong alone: exact GPS coordinates from EXIF. Worth double-checking: a single Lens visual match, since landmarks can repeat across cities.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="ehead">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke="#1B2A3D"><path d="M12 3l8 4v5c0 5-4 8-8 9-4-1-8-4-8-9V7l8-4z"/></svg>
+        <h3>Entry 06 — OPSEC Reflection</h3>
+      </div>
+      <p class="blurb">Geolocating a stranger's photo this easily cuts both ways — it's also a privacy risk to think about for yourself.</p>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">6.1</span> Name one habit to adopt before posting photos online, to reduce your own geolocation risk.</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb61')">Reveal model answer</button>
+        <div class="reveal-box" id="rb61">e.g. disable location tagging before posting, or strip EXIF data before sharing.</div>
+      </div>
+
+      <div class="qsub">
+        <p class="qline"><span class="qid">6.2</span> Why is platform metadata-stripping a double-edged sword?</p>
+        <button class="reveal-btn" onclick="toggleReveal('rb62')">Reveal model answer</button>
+        <div class="reveal-box" id="rb62">It protects everyday users' privacy, but also removes a key forensic trail that investigators rely on — privacy vs. traceability.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ---- EDIT THESE for your real challenge ----
+  const ANSWERS = {
+    // For the demo, accept either the landmark or the city-style flag.
+    location: ["charminar", "flag{charminar}", "hyderabad", "flag{hyderabad}"],
+    time: ["night", "nighttime"],
+    photographer: ["unknown", "not available", "no metadata"]
+  };
+  // This uploaded PNG has no embedded EXIF/GPS data, so the correct forensic takeaway is "not available".
+  const EXIF = {
+    cam: "Not available in this PNG",
+    date: "Not available",
+    lat: "Not available",
+    lng: "Not available",
+    pos: "No GPS metadata found"
+  };
+  document.getElementById('exif-cam').textContent = EXIF.cam;
+  document.getElementById('exif-date').textContent = EXIF.date;
+  document.getElementById('exif-lat').textContent = EXIF.lat;
+  document.getElementById('exif-lng').textContent = EXIF.lng;
+  document.getElementById('exif-pos').textContent = EXIF.pos;
+  // ---------------------------------------------
+
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  function checkFlag(inputId, key, resultId){
+    const val = document.getElementById(inputId).value.trim().toLowerCase().replace(/_/g, ' ');
+    const result = document.getElementById(resultId);
+    result.classList.remove('ok','no');
+    const accepted = ANSWERS[key].map(a => a.toLowerCase().replace(/_/g, ' '));
+    if(accepted.includes(val)){
+      result.textContent = "✔ CONFIRMED — logged to case file.";
+      result.classList.add('ok','show');
+    } else {
+      result.textContent = "✘ Not a match. Re-check your evidence.";
+      result.classList.add('no','show');
+    }
+  }
+
+  function toggleTerminal(){
+    document.getElementById('terminal').classList.toggle('show');
+  }
+
+  // ---- Field Notes questionnaire ----
+  const FN_TOTAL = 6;
+  let fnConfirmed = 0;
+
+  function checkAnswer(inputId, resultId, mode, terms){
+    const val = document.getElementById(inputId).value.trim().toLowerCase();
+    const result = document.getElementById(resultId);
+    result.classList.remove('ok','no');
+    const correct = mode === 'all'
+      ? terms.every(t => val.includes(t))
+      : terms.some(t => val.includes(t));
+
+    if(correct){
+      result.textContent = "✔ Logged.";
+      result.classList.add('ok','show');
+      if(result.dataset.counted !== 'true'){
+        result.dataset.counted = 'true';
+        fnConfirmed++;
+        document.getElementById('fn-progress').textContent = fnConfirmed + " / " + FN_TOTAL + " confirmed";
+      }
+    } else {
+      result.textContent = "✘ Not quite — try rephrasing.";
+      result.classList.add('no','show');
+    }
+  }
+
+  function toggleReveal(id){
+    document.getElementById(id).classList.toggle('show');
+  }
+</script>
+</body>
+</html>
