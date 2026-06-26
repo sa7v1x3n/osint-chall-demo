@@ -802,15 +802,15 @@ GPS Position         : <span id="exif-pos">[lat, lng → drop into Google Maps]<
     // For the demo, accept either the landmark or the city-style flag.
     location: ["charminar", "flag{charminar}", "hyderabad", "flag{hyderabad}"],
     time: ["night", "nighttime"],
-    photographer: ["unknown", "not available", "no metadata"]
+    photographer: ["phone", "iphone", "tourist phone", "tourist's phone"]
   };
-  // This uploaded PNG has no embedded EXIF/GPS data, so the correct forensic takeaway is "not available".
+  // Simulated EXIF data for Charminar
   const EXIF = {
-    cam: "Not available in this PNG",
-    date: "Not available",
-    lat: "Not available",
-    lng: "Not available",
-    pos: "No GPS metadata found"
+    cam: "Apple iPhone 14 Pro",
+    date: "2023:10:15 21:34:12",
+    lat: "17.3616° N",
+    lng: "78.4747° E",
+    pos: "17.3616, 78.4747"
   };
   document.getElementById('exif-cam').textContent = EXIF.cam;
   document.getElementById('exif-date').textContent = EXIF.date;
